@@ -48,44 +48,25 @@ And what about `debug_backtrace()`:
 
 #### Lets try to use `debug_backtrace()`
 
+- strength as an object
+
+`see Example dir for used objects`
+
+- usage
+
 ```php
-class Strength {
+<?php
+// example.php
+use Example\Strength;
+use Example\Elf;
 
-    private $value = 0;
+$strength = new Strength();
+$strength->addStrengthFromRace(new Elf());
+$strength->addBonusFromHeight(15);
+$strength->addMalusFromFatigue(7);
 
-    private $changes = [];
-    
-    public function addRaceStrength(Race $race) {
-        $this->value += $race->getStrength();
-        $this->noticeChange();
-    }
-    
-    private function noticeChange() {
-        $backtrace = debug_backtrace();
-        $this->changes[] = $backtrace[count($backtrace) - 2]; // penultimate step (that before calling noticeChange)
-    }
-    
-    public function addBonusFromHeight($height) {
-        $this->value += $height;
-        $this->noticeChange();
-    }
-    
-    public function addMalusFromFatigue($fatigue) {
-        $this->value += $this->calculateMalusFromFatigue($fatigue);
-        $this->noticeChange();
-    }
-    
-    private function calculateMalusFromFatigue($fatigue) {
-        if ($fatigue < 2) {
-            return 0;
-        }
-        return -1;
-    }
-    
-    public function getChanges() {
-        return $this->changes;
-    }
-}
+echo implode(' ', $strength->getChanges());
+// 0 + strength from race (Example\Elf) = -1 + bonus from height (15) = 2 + malus from fatigue (7) = 1
 ```
 
 to be continued...
