@@ -6,12 +6,13 @@ class Strength
 {
 
     private $value = 0;
-
+    private $previousValue;
     private $changes = [];
 
     public function __construct()
     {
         $this->changes[] = $this->value;
+        $this->previousValue = $this->value;
     }
 
     public function addStrengthFromRace(Race $race)
@@ -23,8 +24,10 @@ class Strength
     private function noticeChange()
     {
         $backtrace = debug_backtrace();
-        $this->changes[] = $this->extractChangesFromBacktrace($backtrace[1]); // penultimate step (that before calling noticeChange)
+        $changingCall = $backtrace[1]; // penultimate step (that before calling noticeChange)
+        $this->changes[] = ($this->value - $this->previousValue) . ' (' . $this->extractChangesFromBacktrace($changingCall) . ')';
         $this->changes[] = '= ' . $this->value;
+        $this->previousValue = $this->value;
     }
 
     private function extractChangesFromBacktrace(array $backtrace)
@@ -32,7 +35,7 @@ class Strength
         $action = $this->formatToSentence($backtrace['function']);
         $argumentsDescription = $this->extractArgumentsDescription($backtrace['args']);
 
-        return "$action ($argumentsDescription)";
+        return "$action($argumentsDescription)";
     }
 
     /**
@@ -92,7 +95,10 @@ class Strength
     {
         return array_map(
             function ($change) {
-                return preg_replace('~^add ~', '+ ', $change);
+                $change = preg_replace('~\(add ~', '(', $change);
+                $change = preg_replace('~^(\d)~', '+ $1', $change);
+                $change = preg_replace('~^-(\d)~', '- $1', $change);
+                return $change;
             },
             $this->changes
         );

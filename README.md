@@ -66,7 +66,7 @@ $strength->addBonusFromHeight(15);
 $strength->addMalusFromFatigue(7);
 
 echo implode(' ', $strength->getChanges());
-// 0 + strength from race (Example\Elf) = -1 + bonus from height (15) = 2 + malus from fatigue (7) = 1
+// + 0 - 1 (strength from race(Example\Elf)) = -1 + 3 (bonus from height(15)) = 2 - 1 (malus from fatigue(7)) = 1
 ```
 
 to be continued...
