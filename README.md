@@ -48,11 +48,10 @@ And what about `debug_backtrace()`:
 
 #### Lets try to use `debug_backtrace()`
 
-- strength as an object
-
-`see Example dir for used objects`
-
-- usage
+- easiest way is let an object to record its changes
+    - `strength` as an object
+    - see [Example dir](./Example) for used objects
+    - usage:
 
 ```php
 <?php
@@ -61,12 +60,14 @@ use Example\Strength;
 use Example\Elf;
 
 $strength = new Strength();
-$strength->addStrengthFromRace(new Elf());
-$strength->addBonusFromHeight(15);
-$strength->addMalusFromFatigue(7);
+$strength->addStrengthFromRace(new Elf()); // debug_backtrace() used internally
+$strength->addBonusFromHeight(15); // debug_backtrace() used internally
+$strength->addMalusFromFatigue(7); // debug_backtrace() used internally
 
 echo implode(' ', $strength->getChanges());
 // + 0 - 1 (strength from race(Example\Elf)) = -1 + 3 (bonus from height(15)) = 2 - 1 (malus from fatigue(7)) = 1
 ```
+
+##### Not bad but... what if you can not change the object?
 
 to be continued...
