@@ -1,3 +1,6 @@
+### This is just a proposal
+- brought to reality in [drd-plus/properties](https://github.com/jaroslavtyc/drd-plus-properties) gaming project library
+
 #### _Where did this value come from?_
 
 #### _What changes this value passed through?_
